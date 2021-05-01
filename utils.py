@@ -7,16 +7,13 @@ import dill
 from pyvis import network as net
 import pandas as pd
 
-def find_paper_title(title, model_name, physics, dataset,
+def find_paper_title(title, model_name, dataset,
                      path="html_files",
                      new_path="html_files/tmp/"):
 
     found = True
     with open("models/" + model_name + ".pkl", 'rb') as f:
         g = dill.load(f)
-
-    if physics:
-        pass #g.show_buttons(filter_=["physics", "edges"])
 
     count = 0
 

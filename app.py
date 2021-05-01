@@ -7,8 +7,12 @@ import utils
 import pandas as pd
 st.title('Citation Networks')
 
-title = st.text_input('paper title', "")
-st.write('Looking for Paper:', title)
+title = st.text_input('Search Paper Title', "")
+
+if title:
+    st.markdown(f'...Looking for paper: **{title}**')
+else: 
+    st.markdown("Enter a paper title here, example: **_TenniVis: Visualization for Tennis Match Analysis_**" )
 
 new_path = "html_files/tmp/"
 sub_network_path = "html_files/small/"
@@ -43,7 +47,7 @@ if title=="":
         source_code = HtmlFile.read()
         components.html(source_code, height = 600,width=1200)
 else:
-    is_found = utils.find_paper_title(title, option, physics, dataset)
+    is_found = utils.find_paper_title(title, option, dataset)
     HtmlFile = open(new_path+option+".html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     components.html(source_code, height = 600,width=1200)
