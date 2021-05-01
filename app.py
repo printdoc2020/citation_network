@@ -4,8 +4,9 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from pyvis.network import Network
 import got
+import pandas as pd
 #Network(notebook=True)
-st.title('Hello Pyvis')
+st.title('Citation Networks')
 # make Network show itself with repr_html
 
 #def net_repr_html(self):
@@ -19,10 +20,26 @@ title = st.text_input('paper title', "")
 st.write('Looking for Paper:', title)
 
 new_path = "html_files/tmp/"
+sub_network_path = "html_files/small/"
+
+dataset_path = "vis_data.csv"
+
 
 st.sidebar.title('Choose your Graph')
 option=st.sidebar.selectbox('select graph',('citation_similarity','doc2vec_similarity'))
 physics=st.sidebar.checkbox('add physics interactivity?')
+
+color_dict = {
+    "InfoVis": "blue",
+    "VAST": "orange",
+    "SciVis": "red"
+}
+
+st.text("Legends: " + str(color_dict))
+
+dataset = pd.read_csv(dataset_path)
+
+
 
 if title=="":
     if option=='citation_similarity':
@@ -34,12 +51,18 @@ if title=="":
     if option=='doc2vec_similarity':
         HtmlFile = open("html_files/similarity_Doc2Vec.html", 'r', encoding='utf-8')
         source_code = HtmlFile.read()
-        components.html(source_code, height = 1200,width=1200)
+        components.html(source_code, height = 600,width=1200)
 else:
-    got.find_paper_title(title, option)
+    got.find_paper_title(title, option, physics, dataset)
     HtmlFile = open(new_path+option+".html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     components.html(source_code, height = 1200,width=1200)
 
+    HtmlFile = open(sub_network_path + "sub_network.html", 'r', encoding='utf-8')
+    source_code = HtmlFile.read()
+    components.html(source_code, height = 500,width=1200)
+
+    sub_data = pd.read_csv("sub_network_data/sub_data.csv")
+    st.dataframe(sub_data) 
 
 
