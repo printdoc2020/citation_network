@@ -18,7 +18,6 @@ dataset_path = "vis_data.csv"
 
 st.sidebar.title('Choose your Graph')
 option=st.sidebar.selectbox('select graph',('citation_similarity','doc2vec_similarity'))
-physics=st.sidebar.checkbox('add physics interactivity?')
 
 color_dict = {
     "InfoVis": "blue",
