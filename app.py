@@ -12,7 +12,7 @@ title = st.text_input('Search Paper Title', "")
 if title:
     st.markdown(f'...Looking for paper: **{title}**')
 else: 
-    st.markdown("Enter a paper title here, example: **_TenniVis: Visualization for Tennis Match Analysis_**" )
+    st.markdown("Enter a paper title here, example: **_Connecting the dots in visual analysis_**" )
 
 new_path = "html_files/tmp/"
 sub_network_path = "html_files/small/"
