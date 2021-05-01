@@ -3,18 +3,9 @@ import streamlit.components.v1 as components
 import networkx as nx
 import matplotlib.pyplot as plt
 from pyvis.network import Network
-import got
+import utils
 import pandas as pd
-#Network(notebook=True)
 st.title('Citation Networks')
-# make Network show itself with repr_html
-
-#def net_repr_html(self):
-#  nodes, edges, height, width, options = self.get_network_data()
-#  html = self.template.render(height=height, width=width, nodes=nodes, edges=edges, options=options)
-#  return html
-
-#Network._repr_html_ = net_repr_html
 
 title = st.text_input('paper title', "")
 st.write('Looking for Paper:', title)
@@ -53,16 +44,17 @@ if title=="":
         source_code = HtmlFile.read()
         components.html(source_code, height = 600,width=1200)
 else:
-    got.find_paper_title(title, option, physics, dataset)
+    is_found = utils.find_paper_title(title, option, physics, dataset)
     HtmlFile = open(new_path+option+".html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
-    components.html(source_code, height = 1200,width=1200)
+    components.html(source_code, height = 600,width=1200)
 
-    HtmlFile = open(sub_network_path + "sub_network.html", 'r', encoding='utf-8')
-    source_code = HtmlFile.read()
-    components.html(source_code, height = 500,width=1200)
+    if is_found:
+        HtmlFile = open(sub_network_path + "sub_network.html", 'r', encoding='utf-8')
+        source_code = HtmlFile.read()
+        components.html(source_code, height = 500,width=1200)
 
-    sub_data = pd.read_csv("sub_network_data/sub_data.csv")
-    st.dataframe(sub_data) 
+        sub_data = pd.read_csv("sub_network_data/sub_data.csv")
+        st.dataframe(sub_data) 
 
 

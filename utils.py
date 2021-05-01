@@ -10,6 +10,8 @@ import pandas as pd
 def find_paper_title(title, model_name, physics, dataset,
                      path="html_files",
                      new_path="html_files/tmp/"):
+
+    found = True
     with open("models/" + model_name + ".pkl", 'rb') as f:
         g = dill.load(f)
 
@@ -26,10 +28,12 @@ def find_paper_title(title, model_name, physics, dataset,
             looking_node = node
             break
 
-    subnetwork_ids = list(neighbors) + [looking_node["id"]]
-    subnetwork_edges = list()
+ 
 
     if neighbors:
+        subnetwork_ids = list(neighbors) + [looking_node["id"]]
+        subnetwork_edges = list()
+
         for node in g.nodes:
             if node["id"] == looking_node["id"]:
                 node.update({"size": "60"})
@@ -61,6 +65,7 @@ def find_paper_title(title, model_name, physics, dataset,
 
 
     else:
+        found = False
         for node in g.nodes:
             node.update({"color": "gray"})
 
@@ -79,6 +84,6 @@ def find_paper_title(title, model_name, physics, dataset,
 
     g.show(new_path + model_name + ".html")
 
-    return
+    return found
 
 
