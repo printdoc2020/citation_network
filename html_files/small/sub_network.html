@@ -25,6 +25,25 @@
         
 
         
+        /* position absolute is important and the container has to be relative or absolute as well. */
+	    div.popup {
+            position:absolute;
+            top:0px;
+            left:0px;
+            display:none;
+            background-color:#f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+	    }
+
+	    /* hide the original tooltip */
+	    .vis-network-tooltip {
+	      display:none;
+	    }
+        
 </style>
 
 </head>
@@ -50,8 +69,8 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"id": 800, "label": 800, "shape": "dot"}, {"id": 1408, "label": 1408, "shape": "dot"}, {"id": 934, "label": 934, "shape": "dot"}, {"id": 1081, "label": 1081, "shape": "dot"}, {"id": 1082, "label": 1082, "shape": "dot"}, {"color": "red", "id": 1027, "label": 1027, "shape": "dot"}]);
-        edges = new vis.DataSet([{"from": 800, "to": 934, "width": 6.0}, {"from": 800, "to": 1027, "width": 5.0}, {"from": 934, "to": 1027, "width": 5.0}, {"from": 934, "to": 1081, "width": 5.0}, {"from": 1027, "to": 1081, "width": 5.0}, {"from": 1027, "to": 1082, "width": 4.0}, {"from": 1027, "to": 1408, "width": 4.0}]);
+        nodes = new vis.DataSet([{"color": "blue", "id": 217, "label": 217, "shape": "dot", "title": "\u003cb\u003ePaper id\u003c/b\u003e: 217 (InfoVis)  - \u003ca href=\"http://dx.doi.org/10.1109/INFVIS.2004.72\" target=\"_blank\"\u003eLink\u003c/a\u003e; \u003cbr\u003e\u003cb\u003eAuthors: \u003c/b\u003e: T.A. Keahey;K.C. Cox; \u003cbr\u003e\u003cb\u003eTitle\u003c/b\u003e: VIM: A Framework for Intelligence Analysis; \u003cbr\u003e\u003cb\u003eAbstract\u003c/b\u003e: Intelligence analysts receive thousands of facts from a variety of sources. In addition to the bare details of the fact \u2014 a particular person, for example \u2014 each fact may have provenance, reliability, weight, and other attributes. Each fact may also be associated with other facts, e.g. that one person met another at a particular location. The analyst\u2019s task is to examine a huge collection of such loosely-structured facts, and try to \"connect the dots\" to perceive the underlying and unknown causes \u2014 and their possible future courses. We have designed and implemented a Java platform called VIM to support intelligence analysts in their work."}, {"color": "orange", "id": 1372, "label": 1372, "shape": "dot", "title": "\u003cb\u003ePaper id\u003c/b\u003e: 1372 (VAST)  - \u003ca href=\"http://dx.doi.org/10.1109/VAST.2016.7883517\" target=\"_blank\"\u003eLink\u003c/a\u003e; \u003cbr\u003e\u003cb\u003eAuthors: \u003c/b\u003e: Yuanzhe Chen;Qing Chen;Mingqian Zhao;Sebastien Boyer;Kalyan Veeramachaneni;Huamin Qu; \u003cbr\u003e\u003cb\u003eTitle\u003c/b\u003e: DropoutSeer: Visualizing learning patterns in Massive Open Online Courses for dropout reasoning and prediction; \u003cbr\u003e\u003cb\u003eAbstract\u003c/b\u003e: Aiming at massive participation and open access education, Massive Open Online Courses (MOOCs) have attracted millions of learners over the past few years. However, the high dropout rate of learners is considered to be one of the most crucial factors that may hinder the development of MOOCs. To tackle this problem, statistical models have been developed to predict dropout behavior based on learner activity logs. Although predictive models can foresee the dropout behavior, it is still difficult for users to understand the reasons behind the predicted results and further design interventions to prevent dropout. In addition, with a better understanding of dropout, researchers in the area of predictive modeling in turn can improve the models. In this paper, we introduce DropoutSeer, a visual analytics system which not only helps instructors and education experts understand the reasons for dropout, but also allows researchers to identify crucial features which can further improve the performance of the models. Both the heterogeneous data extracted from three different kinds of learner activity logs (i.e., clickstream, forum posts and assignment records) and the predicted results are visualized in the proposed system. Case studies and expert interviews have been conducted to demonstrate the usefulness and effectiveness of DropoutSeer."}, {"color": "orange", "id": 351, "label": 351, "shape": "dot", "title": "\u003cb\u003ePaper id\u003c/b\u003e: 351 (VAST)  - \u003ca href=\"http://dx.doi.org/10.1109/VAST.2007.4389006\" target=\"_blank\"\u003eLink\u003c/a\u003e; \u003cbr\u003e\u003cb\u003eAuthors: \u003c/b\u003e: John Stasko;Carsten Gorg;Zhicheng Liu;Kanupriya Singhal; \u003cbr\u003e\u003cb\u003eTitle\u003c/b\u003e: Jigsaw: Supporting Investigative Analysis through Interactive Visualization; \u003cbr\u003e\u003cb\u003eAbstract\u003c/b\u003e: Investigative analysts who work with collections of text documents connect embedded threads of evidence in order to formulate hypotheses about plans and activities of potential interest. As the number of documents and the corresponding number of concepts and entities within the documents grow larger, sense-making processes become more and more difficult for the analysts. We have developed a visual analytic system called Jigsaw that represents documents and their entities visually in order to help analysts examine reports more efficiently and develop theories about potential actions more quickly. Jigsaw provides multiple coordinated views of document entities with a special emphasis on visually illustrating connections between entities across the different documents."}, {"color": "orange", "id": 303, "label": 303, "shape": "dot", "title": "\u003cb\u003ePaper id\u003c/b\u003e: 303 (VAST)  - \u003ca href=\"http://dx.doi.org/10.1109/VAST.2006.261439\" target=\"_blank\"\u003eLink\u003c/a\u003e; \u003cbr\u003e\u003cb\u003eAuthors: \u003c/b\u003e: Susan E. Brennan;Klaus Mueller;Greg Zelinsky;IV Ramakrishnan;David S. Warren;Arie Kaufman; \u003cbr\u003e\u003cb\u003eTitle\u003c/b\u003e: Toward a Multi-Analyst, Collaborative Framework for Visual Analytics; \u003cbr\u003e\u003cb\u003eAbstract\u003c/b\u003e: We describe a framework for the display of complex, multidimensional data, designed to facilitate exploration, analysis, and collaboration among multiple analysts. This framework aims to support human collaboration by making it easier to share representations, to translate from one point of view to another, to explain arguments, to update conclusions when underlying assumptions change, and to justify or account for decisions or actions. Multidimensional visualization techniques are used with interactive, context-sensitive, and tunable graphs. Visual representations are flexibly generated using a knowledge representation scheme based on annotated logic; this enables not only tracking and fusing different viewpoints, but also unpacking them. Fusing representations supports the creation of multidimensional meta-displays as well as the translation or mapping from one point of view to another. At the same time, analysts also need to be able to unpack one another\u0027s complex chains of reasoning, especially if they have reached different conclusions, and to determine the implications, if any, when underlying assumptions or evidence turn out to be false. The framework enables us to support a variety of scenarios as well as to systematically generate and test experimental hypotheses about the impact of different kinds of visual representations upon interactive collaboration by teams of distributed analysts"}, {"color": "orange", "id": 502, "label": 502, "shape": "dot", "size": "35", "title": "\u003cb\u003ePaper id\u003c/b\u003e: 502 (VAST)  - \u003ca href=\"http://dx.doi.org/10.1109/VAST.2009.5333023\" target=\"_blank\"\u003eLink\u003c/a\u003e; \u003cbr\u003e\u003cb\u003eAuthors: \u003c/b\u003e: Yedendra B. Shrinivasan;David Gotzy;Jie Lu; \u003cbr\u003e\u003cb\u003eTitle\u003c/b\u003e: Connecting the dots in visual analysis; \u003cbr\u003e\u003cb\u003eAbstract\u003c/b\u003e: During visual analysis, users must often connect insights discovered at various points of time. This process is often called ldquoconnecting the dots.rdquo When analysts interactively explore complex datasets over multiple sessions, they may uncover a large number of findings. As a result, it is often difficult for them to recall the past insights, views and concepts that are most relevant to their current line of inquiry. This challenge is even more difficult during collaborative analysis tasks where they need to find connections between their own discoveries and insights found by others. In this paper, we describe a context-based retrieval algorithm to identify notes, views and concepts from users\u0027 past analyses that are most relevant to a view or a note based on their line of inquiry. We then describe a related notes recommendation feature that surfaces the most relevant items to the user as they work based on this algorithm. We have implemented this recommendation feature in HARVEST, a Web based visual analytic system. We evaluate the related notes recommendation feature of HARVEST through a case study and discuss the implications of our approach."}]);
+        edges = new vis.DataSet([{"from": 217, "to": 502, "width": 0.86841875}, {"from": 303, "to": 502, "width": 0.89573365}, {"from": 351, "to": 502, "width": 0.86190736}, {"from": 502, "to": 1372, "width": 0.87894803}]);
 
         // adding nodes and edges to the graph
         data = {nodes: nodes, edges: edges};
@@ -92,6 +111,69 @@
 
         network = new vis.Network(container, data, options);
 	 
+        
+        // make a custom popup
+        var popup = document.createElement("div");
+        popup.className = 'popup';
+        popupTimeout = null;
+        popup.addEventListener('mouseover', function () {
+            console.log(popup)
+            if (popupTimeout !== null) {
+                clearTimeout(popupTimeout);
+                popupTimeout = null;
+            }
+        });
+        popup.addEventListener('mouseout', function () {
+            if (popupTimeout === null) {
+                hidePopup();
+            }
+        });
+        container.appendChild(popup);
+
+
+        // use the popup event to show
+        network.on("showPopup", function (params) {
+            showPopup(params);
+        });
+
+        // use the hide event to hide it
+        network.on("hidePopup", function (params) {
+            hidePopup();
+        });
+
+
+        // hiding the popup through css
+        function hidePopup() {
+            popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
+        }
+
+        // showing the popup
+        function showPopup(nodeId) {
+            // get the data from the vis.DataSet
+            var nodeData = nodes.get([nodeId]);
+            popup.innerHTML = nodeData[0].title;
+
+            // get the position of the node
+            var posCanvas = network.getPositions([nodeId])[nodeId];
+
+            // get the bounding box of the node
+            var boundingBox = network.getBoundingBox(nodeId);
+
+            //position tooltip:
+            posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
+
+            // convert coordinates to the DOM space
+            var posDOM = network.canvasToDOM(posCanvas);
+
+            // Give it an offset
+            posDOM.x += 10;
+            posDOM.y -= 20;
+
+            // show and place the tooltip.
+            popup.style.display = 'block';
+            popup.style.top = posDOM.y + 'px';
+            popup.style.left = posDOM.x + 'px';
+        }
         
 
 

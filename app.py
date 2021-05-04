@@ -47,7 +47,7 @@ if title=="":
         source_code = HtmlFile.read()
         components.html(source_code, height = 600,width=1200)
 else:
-    is_found = utils.find_paper_title(title, option, dataset)
+    is_found = utils.find_paper_title(title, option, dataset, color_dict)
     HtmlFile = open(new_path+option+".html", 'r', encoding='utf-8')
     source_code = HtmlFile.read()
     components.html(source_code, height = 600,width=1200)
