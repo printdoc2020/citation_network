@@ -5,7 +5,14 @@ import matplotlib.pyplot as plt
 from pyvis.network import Network
 import utils
 import pandas as pd
-st.title('Citation Networks')
+
+st.set_page_config(
+     page_title="Citation Networks",
+     page_icon="🧊",
+     layout="wide",
+     initial_sidebar_state="expanded",
+ )
+
 
 title = st.text_input('Search Paper Title', "")
 
