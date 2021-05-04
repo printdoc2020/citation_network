@@ -64,6 +64,8 @@ def find_paper_title(title, model_name, dataset, color_dict,
         g_sub.add_nodes(subnetwork_ids)
         g_sub.add_edges([ [e['from'], e["to"], e["width"]] for e in subnetwork_edges]) 
 
+        g_sub.set_edge_smooth('dynamic')
+
 
         dataset_sub  = dataset[dataset["id"].isin(subnetwork_ids)]
         dataset_sub.to_csv("sub_network_data/sub_data.csv", index=False)
