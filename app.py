@@ -7,33 +7,40 @@ import utils
 import pandas as pd
 
 st.set_page_config(
-     page_title="Citation Networks",
-     page_icon="🧊",
-     layout="wide",
-     initial_sidebar_state="expanded",
+	 page_title="Citation Networks",
+	 page_icon="random",
+	 layout="wide",
+	 initial_sidebar_state="expanded",
  )
 
+
+height, width = 500, 1400
+display_cols = ['id', 'Conference', 'Year', 'Title', 'DOI', 'PaperType',
+       'Abstract', 'AuthorNames']
+
+# full_cols = ['Conference', 'Year', 'Title', 'DOI', 'id', 'cite_to_list',
+#        'cited_by_list', 'Link', 'FirstPage', 'LastPage', 'PaperType',
+#        'Abstract', 'AuthorNames-Deduped', 'AuthorNames', 'AuthorAffiliation',
+#        'InternalReferences', 'AuthorKeywords', 'AminerCitationCount_02-2020',
+#        'XploreCitationCount - 2020-01', 'PubsCited', 'Award']
 
 title = st.text_input('Search Paper Title', "")
 
 if title:
-    st.markdown(f'...Looking for paper: **{title}**')
+	st.markdown(f'...Looking for paper: **{title}**')
 else: 
-    st.markdown("Enter a paper title here, example: **_Connecting the dots in visual analysis_**" )
+	st.markdown("Enter a paper title here, example: **_Connecting the dots in visual analysis_**" )
 
-new_path = "html_files/tmp/"
-sub_network_path = "html_files/small/"
+after_searching_path = "html_files/search/"
+small_network_path = "html_files/small/"
 
 dataset_path = "vis_data.csv"
 
 
-st.sidebar.title('Choose your Graph')
-option=st.sidebar.selectbox('select graph',('citation_similarity','doc2vec_similarity'))
-
 color_dict = {
-    "InfoVis": "blue",
-    "VAST": "orange",
-    "SciVis": "red"
+	"InfoVis": "blue",
+	"VAST": "orange",
+	"SciVis": "red"
 }
 
 st.text("Legends: " + str(color_dict))
@@ -43,28 +50,32 @@ dataset = pd.read_csv(dataset_path)
 
 
 if title=="":
-    if option=='citation_similarity':
-        HtmlFile = open("html_files/similarity_using_citeTo_and_citedBy.html", 'r', encoding='utf-8')
-        source_code = HtmlFile.read()
-        components.html(source_code, height = 1200,width=1200)
+	HtmlFile = open("html_files/reference_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
 
 
-    if option=='doc2vec_similarity':
-        HtmlFile = open("html_files/similarity_Doc2Vec.html", 'r', encoding='utf-8')
-        source_code = HtmlFile.read()
-        components.html(source_code, height = 600,width=1200)
+	HtmlFile = open("html_files/doc2vec_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
 else:
-    is_found = utils.find_paper_title(title, option, dataset, color_dict)
-    HtmlFile = open(new_path+option+".html", 'r', encoding='utf-8')
-    source_code = HtmlFile.read()
-    components.html(source_code, height = 600,width=1200)
+	found_list = utils.find_paper_title(title, dataset, color_dict, small_network_path, after_searching_path)
 
-    if is_found:
-        HtmlFile = open(sub_network_path + "sub_network.html", 'r', encoding='utf-8')
-        source_code = HtmlFile.read()
-        components.html(source_code, height = 500,width=1200)
+	HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
 
-        sub_data = pd.read_csv("sub_network_data/sub_data.csv")
-        st.dataframe(sub_data) 
+	HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
+	
+	for found_obj in found_list:
 
+		if found_obj["found"]:
+			HtmlFile = open(small_network_path + f"{found_obj['model_name']}_sub_network.html", 'r', encoding='utf-8')
+			source_code = HtmlFile.read()
+			components.html(source_code, height = height,width=width)
 
+			sub_data = pd.read_csv("sub_network_data/" + f"{found_obj['model_name']}_sub_data.csv")
+			st.dataframe(sub_data[display_cols]) 
+		
