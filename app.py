@@ -15,6 +15,7 @@ st.set_page_config(
 
 
 height, width = 500, 1400
+height_shared_subnetworks = 700
 display_cols = ['id', 'Conference', 'Year', 'Title', 'DOI', 'PaperType',
        'Abstract', 'AuthorNames']
 
@@ -46,7 +47,6 @@ color_dict = {
 
 st.text("Legends: " + str(color_dict))
 
-separate_sub_networks = st.checkbox("Separate Sub Networks")
 
 
 dataset = pd.read_csv(dataset_path)
@@ -64,17 +64,20 @@ if title=="":
 	components.html(source_code, height = height,width=width)
 else:
 
+	HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
+
+	HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
+	source_code = HtmlFile.read()
+	components.html(source_code, height = height,width=width)
+
+	
+	separate_sub_networks = st.checkbox("Separate Sub Networks")
+
+
 	if separate_sub_networks:
 		found_list = utils.find_paper_title_all_models_separately(title, dataset, color_dict, small_network_path, after_searching_path)
-
-		HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
-		source_code = HtmlFile.read()
-		components.html(source_code, height = height,width=width)
-
-		HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
-		source_code = HtmlFile.read()
-		components.html(source_code, height = height,width=width)
-		
 		for found_obj in found_list:
 
 			if found_obj["found"]:
@@ -87,20 +90,10 @@ else:
 	else:
 		found = utils.find_paper_title_all_models_shared_subnetworks(title, dataset, color_dict, small_network_path,
                     after_searching_path)
-
-
-		HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
-		source_code = HtmlFile.read()
-		components.html(source_code, height = height,width=width)
-
-		HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
-		source_code = HtmlFile.read()
-		components.html(source_code, height = height,width=width)
-
 		if found:
 			HtmlFile = open(small_network_path + "shared_sub_networks.html", 'r', encoding='utf-8')
 			source_code = HtmlFile.read()
-			components.html(source_code, height = height,width=width)
+			components.html(source_code, height = height_shared_subnetworks,width=width)
 
 			sub_data = pd.read_csv("sub_network_data/" + f"shared_sub_data.csv")
 			st.dataframe(sub_data[display_cols]) 

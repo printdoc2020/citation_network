@@ -120,7 +120,7 @@ def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, 
             edge_tmp = {"width": edge['width'], "from": model_2_prefix + str(edge['from']), "to":  model_2_prefix + str(edge['to'])}
             subnetwork_edges.append( edge_tmp )
 
-    g_sub = net.Network(height="500px", width="100%",heading=f'Sub Networks')
+    g_sub = net.Network(height="700px", width="100%",heading=f'Sub Networks')
     g_sub.set_template("html_files/template_2.html")
 
 
