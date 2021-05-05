@@ -48,6 +48,10 @@ color_dict = {
 	"SciVis": "red"
 }
 
+edge_colors= {
+    "mutual_authors": "green",
+    "different_authors": "gray"
+}
 
 st.text("Legends: " + str(color_dict))
 
@@ -82,10 +86,11 @@ else:
 		looking_node_dict[model_name] = looking_node
 
 	separate_sub_networks = st.checkbox("Separate Sub Networks")
+	st.text("Legends: " + str(edge_colors))
 
 
 	if separate_sub_networks:
-		found_list = utils.find_paper_title_all_models_separately(neighbors_dict, looking_node_dict, dataset, color_dict, small_network_path, after_searching_path)
+		found_list = utils.find_paper_title_all_models_separately(neighbors_dict, looking_node_dict, dataset, color_dict, small_network_path, after_searching_path, edge_colors)
 		for found_obj in found_list:
 			if found_obj["found"]:
 				HtmlFile = open(small_network_path + f"{found_obj['model_name']}_sub_network.html", 'r', encoding='utf-8')
@@ -96,7 +101,7 @@ else:
 				st.dataframe(sub_data[display_cols]) 
 	else:
 		found = utils.find_paper_title_all_models_shared_subnetworks(neighbors_dict, looking_node_dict, dataset, color_dict, small_network_path,
-                    after_searching_path)
+               after_searching_path, edge_colors)
 		if found:
 			HtmlFile = open(small_network_path + "shared_sub_networks.html", 'r', encoding='utf-8')
 			source_code = HtmlFile.read()

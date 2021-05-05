@@ -9,10 +9,7 @@ import pandas as pd
 from os.path import join as os_join
 
 
-edge_colors= {
-    "mutual_authors": "green",
-    "different_authors": "gray"
-}
+
 
 def get_authors_from_node_id( dataset, node_id):
     author_info = dataset[dataset["id"] == node_id].AuthorNames.values[0]
@@ -31,13 +28,18 @@ def get_mutual_authors(node_id_1, node_id_2, dataset):
 def get_mouseover_dict(dataset):
     id_title_abstract = "<b>Paper id</b>: " + dataset["id"].astype(str) + " ("  + dataset["Conference"] + ") " " - "\
     "<a href=\""  + dataset["Link"] + "\" target=\"_blank\">Link</a>" + \
-    "; <br><b>Authors: </b>: " + dataset["AuthorNames"] + \
-    "; <br><b>Title</b>: " + dataset["Title"] + \
-    "; <br><b>Abstract</b>: " + dataset["Abstract"]
+    "<br><b>Authors: </b>: " + dataset["AuthorNames"] + \
+    "<br><b>Title</b>: " + dataset["Title"] + \
+    "<br><b>Abstract</b>: " + dataset["Abstract"]
 
     map_id_to_title={k: v for  k,v in zip(dataset.index, id_title_abstract)}
     return map_id_to_title
 
+
+def get_node_id_color(node_id, df, color_dict):
+
+    conference = df[df["id"] == int(node_id)].Conference.values[0]
+    return color_dict[conference]
 
 def get_node_color(node, df, color_dict):
     node_id = int(str(node["id"]).split("_")[-1])
@@ -79,7 +81,7 @@ def update_original_network(title, model_name, after_searching_path):
 
 
 
-def write_sub_network(model_name, dataset, neighbors, looking_node, small_network_path, color_dict):
+def write_sub_network(model_name, dataset, neighbors, looking_node, small_network_path, color_dict, edge_colors):
     subnetwork_ids = list(neighbors) + [looking_node["id"]]
     subnetwork_edges = list()
 
@@ -108,7 +110,7 @@ def write_sub_network(model_name, dataset, neighbors, looking_node, small_networ
     g_sub.add_nodes(subnetwork_ids)
 
     for e in subnetwork_edges:
-        g_sub.add_edge(e['from'], e['to'], color=e['color'], width=e['width'], title=e["title"])
+        g_sub.add_edge(e['from'], e['to'], color=e['color'], width=e['width']/2, title=e["title"])
 
     g_sub.set_edge_smooth('dynamic')
 
@@ -117,7 +119,7 @@ def write_sub_network(model_name, dataset, neighbors, looking_node, small_networ
 
     for node in g_sub.nodes:
         if node["id"] == looking_node["id"]:
-            node.update({"size": "35"})
+            node.update({"size": "32"})
         node.update({"color": get_node_color(node, dataset_sub, color_dict)})
         node.update({"title": map_id_to_title.get(node["id"])})
 
@@ -126,7 +128,7 @@ def write_sub_network(model_name, dataset, neighbors, looking_node, small_networ
 
 
 
-def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, neighbors_2, looking_node, small_network_path, color_dict):
+def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, neighbors_2, looking_node, small_network_path, color_dict, edge_colors):
 
     if neighbors_1:
         subnetwork_ids_1 = list(neighbors_1) + [looking_node["id"]]
@@ -146,8 +148,8 @@ def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, 
 
     subnetwork_edges = list()
 
-    model_1_prefix = "doc2vec_"
-    model_2_prefix = "reference_"
+    model_1_prefix = "doc_"
+    model_2_prefix = "ref_"
 
     with open("models/" + model_name_1 + ".pkl", 'rb') as f:
         g_1 = dill.load(f)
@@ -189,24 +191,26 @@ def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, 
     subnetwork_ids_1_add_prefix = [model_1_prefix + str(n) for n in subnetwork_ids_1]
     subnetwork_ids_2_add_prefix = [model_2_prefix + str(n) for n in subnetwork_ids_2]
 
-    g_sub.add_nodes( set.union(set(subnetwork_ids_1_add_prefix), set(subnetwork_ids_2_add_prefix)) )
+    node_list = set.union(set(subnetwork_ids_1_add_prefix), set(subnetwork_ids_2_add_prefix))
+    map_id_to_title = get_mouseover_dict(dataset_sub)
+
+    for node_id_raw in node_list:
+        node_id = str(node_id_raw).split("_")[-1]
+        title =  map_id_to_title.get(int(node_id))
+
+        if str(node_id) == str(looking_node["id"]): 
+            g_sub.add_node( node_id_raw, size=32, title=title , color= get_node_id_color(node_id, dataset_sub, color_dict))
+
+        else:
+            g_sub.add_node( node_id_raw, title=title, color= get_node_id_color(node_id, dataset_sub, color_dict))
+
     # g_sub.add_edges([ [e['from'], e["to"], e["width"]] for e in subnetwork_edges]) 
     for e in subnetwork_edges:
-        g_sub.add_edge(e['from'], e['to'], color=e['color'], width=e['width'], title=e["title"])
+        g_sub.add_edge(e['from'], e['to'], title=e["title"], color=e['color'], width=e['width']/2)
     g_sub.set_edge_smooth('dynamic')
 
    
     
-    map_id_to_title = get_mouseover_dict(dataset_sub)
-
-    for node in g_sub.nodes:
-        node_id = int(str(node["id"]).split("_")[-1])
-
-        if node_id == looking_node["id"]:
-            node.update({"size": "35"})
-        node.update({"color": get_node_color(node, dataset_sub, color_dict)})
-        node.update({"title": map_id_to_title.get(node_id)})
-
 
     g_sub.show( os_join(small_network_path, "shared_sub_networks.html"))
 
@@ -214,14 +218,14 @@ def write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, 
 
 
 
-def find_paper_title_for_1_model(neighbors_dict, looking_node_dict, model_name, dataset, color_dict, small_network_path, after_searching_path):
+def find_paper_title_for_1_model(neighbors_dict, looking_node_dict, model_name, dataset, color_dict, small_network_path, after_searching_path, edge_colors):
 
     found = None
     
     neighbors, looking_node = neighbors_dict[model_name], looking_node_dict[model_name]
     if neighbors:
         found = True
-        write_sub_network(model_name, dataset, neighbors, looking_node, small_network_path, color_dict)
+        write_sub_network(model_name, dataset, neighbors, looking_node, small_network_path, color_dict, edge_colors)
     else:
         found = False
 
@@ -238,7 +242,7 @@ def find_paper_title_all_models_separately(neighbors_dict, looking_node_dict, da
 
 
 def find_paper_title_all_models_shared_subnetworks(neighbors_dict, looking_node_dict, dataset, color_dict, small_network_path,
-                    after_searching_path):
+                    after_searching_path, edge_colors):
     
     model_name_1 = "doc2vec_similarity"
     model_name_2 = "reference_similarity"
@@ -249,7 +253,7 @@ def find_paper_title_all_models_shared_subnetworks(neighbors_dict, looking_node_
 
     if looking_node:
         found=True
-        write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, neighbors_2, looking_node, small_network_path, color_dict)
+        write_shared_sub_networks(model_name_1, model_name_2, dataset, neighbors_1, neighbors_2, looking_node, small_network_path, color_dict, edge_colors)
 
     else:
         found=False
