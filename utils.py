@@ -234,10 +234,10 @@ def find_paper_title_for_1_model(neighbors_dict, looking_node_dict, model_name, 
 
 
 def find_paper_title_all_models_separately(neighbors_dict, looking_node_dict, dataset, color_dict, small_network_path,
-                    after_searching_path):
+                    after_searching_path, edge_colors):
     
-    found_citation = find_paper_title_for_1_model(neighbors_dict, looking_node_dict,"reference_similarity", dataset, color_dict, small_network_path, after_searching_path)
-    found_doc2vec = find_paper_title_for_1_model(neighbors_dict, looking_node_dict,"doc2vec_similarity", dataset, color_dict, small_network_path, after_searching_path)
+    found_citation = find_paper_title_for_1_model(neighbors_dict, looking_node_dict,"reference_similarity", dataset, color_dict, small_network_path, after_searching_path,edge_colors)
+    found_doc2vec = find_paper_title_for_1_model(neighbors_dict, looking_node_dict,"doc2vec_similarity", dataset, color_dict, small_network_path, after_searching_path, edge_colors)
     return [found_citation, found_doc2vec]
 
 
