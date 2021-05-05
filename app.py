@@ -43,7 +43,11 @@ color_dict = {
 	"SciVis": "red"
 }
 
+
 st.text("Legends: " + str(color_dict))
+
+separate_sub_networks = st.checkbox("Separate Sub Networks")
+
 
 dataset = pd.read_csv(dataset_path)
 
@@ -59,23 +63,46 @@ if title=="":
 	source_code = HtmlFile.read()
 	components.html(source_code, height = height,width=width)
 else:
-	found_list = utils.find_paper_title(title, dataset, color_dict, small_network_path, after_searching_path)
 
-	HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
-	source_code = HtmlFile.read()
-	components.html(source_code, height = height,width=width)
+	if separate_sub_networks:
+		found_list = utils.find_paper_title_all_models_separately(title, dataset, color_dict, small_network_path, after_searching_path)
 
-	HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
-	source_code = HtmlFile.read()
-	components.html(source_code, height = height,width=width)
-	
-	for found_obj in found_list:
+		HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
+		source_code = HtmlFile.read()
+		components.html(source_code, height = height,width=width)
 
-		if found_obj["found"]:
-			HtmlFile = open(small_network_path + f"{found_obj['model_name']}_sub_network.html", 'r', encoding='utf-8')
+		HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
+		source_code = HtmlFile.read()
+		components.html(source_code, height = height,width=width)
+		
+		for found_obj in found_list:
+
+			if found_obj["found"]:
+				HtmlFile = open(small_network_path + f"{found_obj['model_name']}_sub_network.html", 'r', encoding='utf-8')
+				source_code = HtmlFile.read()
+				components.html(source_code, height = height,width=width)
+
+				sub_data = pd.read_csv("sub_network_data/" + f"{found_obj['model_name']}_sub_data.csv")
+				st.dataframe(sub_data[display_cols]) 
+	else:
+		found = utils.find_paper_title_all_models_shared_subnetworks(title, dataset, color_dict, small_network_path,
+                    after_searching_path)
+
+
+		HtmlFile = open(after_searching_path+"reference_similarity.html", 'r', encoding='utf-8')
+		source_code = HtmlFile.read()
+		components.html(source_code, height = height,width=width)
+
+		HtmlFile = open(after_searching_path+"doc2vec_similarity.html", 'r', encoding='utf-8')
+		source_code = HtmlFile.read()
+		components.html(source_code, height = height,width=width)
+
+		if found:
+			HtmlFile = open(small_network_path + "shared_sub_networks.html", 'r', encoding='utf-8')
 			source_code = HtmlFile.read()
 			components.html(source_code, height = height,width=width)
 
-			sub_data = pd.read_csv("sub_network_data/" + f"{found_obj['model_name']}_sub_data.csv")
+			sub_data = pd.read_csv("sub_network_data/" + f"shared_sub_data.csv")
 			st.dataframe(sub_data[display_cols]) 
+
 		
